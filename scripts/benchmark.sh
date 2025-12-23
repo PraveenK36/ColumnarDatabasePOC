@@ -13,7 +13,8 @@ for i in $(seq 1 ${ITERATIONS}); do
   # ClickHouse
   CH_START=$(date +%s%N)
   docker exec -i clickhouse clickhouse-client \
-    --query "SELECT count() FROM app.users WHERE state_province_code = 'TX';" \
+    --query "SELECT count() FROM app.users WHERE state_province_code = 'TX'
+    and preferred_movie_genere = 'Thriller';" \
     > /dev/null
   CH_END=$(date +%s%N)
   CH_MS=$(( (CH_END - CH_START) / 1000000 ))
@@ -21,7 +22,8 @@ for i in $(seq 1 ${ITERATIONS}); do
   # MySQL
   MY_START=$(date +%s%N)
   docker exec -i mysql-app mysql -upraveen -ptest123 \
-    -e "SELECT COUNT(*) FROM app.users WHERE state_province_code = 'TX';" \
+    -e "SELECT COUNT(*) FROM app.users WHERE state_province_code = 'TX'
+    and preferred_movie_genere = 'Thriller';" \
     > /dev/null
   MY_END=$(date +%s%N)
   MY_MS=$(( (MY_END - MY_START) / 1000000 ))
