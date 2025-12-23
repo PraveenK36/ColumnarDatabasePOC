@@ -12,7 +12,7 @@ docker exec -i ${MYSQL_CONTAINER} ${MYSQL_CMD} < create_users_table.sql
 
 echo "Setting recursion limit and inserting users..."
 docker exec -i ${MYSQL_CONTAINER} ${MYSQL_CMD} <<EOF
-SET SESSION cte_max_recursion_depth = 1000000;
+SET SESSION cte_max_recursion_depth = 10000000;
 $(cat insert_sample_users.sql)
 EOF
 
