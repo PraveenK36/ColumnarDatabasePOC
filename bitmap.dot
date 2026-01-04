@@ -1,0 +1,107 @@
+digraph BitmapIndexes {
+    rankdir=TB;
+    node [fontname="Arial", fontsize=10, shape=box];
+
+    // Title
+    title [label="BITMAP INDEXES FOR COLUMNAR DATABASE\n10 Million Records",
+           fillcolor="#E8F4F8", style=filled, fontsize=12];
+
+    // Genre and State headers side by side
+    {rank=same;
+        genre_header [label="GENRE BITMAP INDEX\n(30 distinct values)\nEach bitmap: 10M bits = 1.25 MB",
+                      fillcolor="#F5A623", fontcolor=white, style=filled, width=4];
+        state_header [label="STATE BITMAP INDEX\n(50 distinct values)\nEach bitmap: 10M bits = 1.25 MB",
+                      fillcolor="#7ED321", style=filled, width=4];
+    }
+
+    // Row 1
+    {rank=same;
+        g1 [label="Adventure | 1000000000000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s1 [label="AK | 1000000000000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Row 2
+    {rank=same;
+        g2 [label="Comedy    | 0100000000000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s2 [label="AL | 0100000000000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Row 3
+    {rank=same;
+        g3 [label="Drama     | 0010000000000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s3 [label="AR | 0010000000000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Row 4
+    {rank=same;
+        g4 [label="Thriller  | 0001000000000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s4 [label="AZ | 0001000000000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Row 5
+    {rank=same;
+        g5 [label="Horror    | 0000100000000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s5 [label="CA | 0000100000000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Row 6
+    {rank=same;
+        g6 [label="Romance   | 0000010000000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s6 [label="CO | 0000010000000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Row 7
+    {rank=same;
+        g7 [label="Crime     | 0000001000000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s7 [label="CT | 0000001000000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Row 8
+    {rank=same;
+        g8 [label="Mystery   | 0000000100000000...", fillcolor="#FFE5CC", style=filled, fontname="Courier", width=4];
+        s8 [label="DE | 0000000100000000...", fillcolor="#D4EDDA", style=filled, fontname="Courier", width=4];
+    }
+
+    // Dots row
+    {rank=same;
+        gdots [label="... (22 more genres) ...", fillcolor="#E0E0E0", style=filled, width=4];
+        sdots [label="... (42 more states) ...", fillcolor="#E0E0E0", style=filled, width=4];
+    }
+
+    // Stats row
+    {rank=same;
+        genre_stats [label="Total: 37.5 MB\n(30 × 1.25 MB)", fillcolor="#FFFACD", style=filled, width=4];
+        state_stats [label="Total: 62.5 MB\n(50 × 1.25 MB)", fillcolor="#FFFACD", style=filled, width=4];
+    }
+
+    // Vertical alignment - Genre column
+    title -> genre_header [style=invis];
+    genre_header -> g1 [style=invis];
+    g1 -> g2 [style=invis];
+    g2 -> g3 [style=invis];
+    g3 -> g4 [style=invis];
+    g4 -> g5 [style=invis];
+    g5 -> g6 [style=invis];
+    g6 -> g7 [style=invis];
+    g7 -> g8 [style=invis];
+    g8 -> gdots [style=invis];
+    gdots -> genre_stats [style=invis];
+
+    // Vertical alignment - State column
+    title -> state_header [style=invis];
+    state_header -> s1 [style=invis];
+    s1 -> s2 [style=invis];
+    s2 -> s3 [style=invis];
+    s3 -> s4 [style=invis];
+    s4 -> s5 [style=invis];
+    s5 -> s6 [style=invis];
+    s6 -> s7 [style=invis];
+    s7 -> s8 [style=invis];
+    s8 -> sdots [style=invis];
+    sdots -> state_stats [style=invis];
+
+    // Legend
+    label="\nBITMAP INDEXES IN COLUMNAR DATABASES\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nTotal Storage: 100 MB uncompressed (37.5 MB + 62.5 MB)\nEach bitmap: 10 million bits (1 bit per row). Bit=1 means that row has this value.";
+    fontsize=11;
+    labelloc=b;
+}

@@ -1,0 +1,96 @@
+digraph BPlusTree {
+    // Graph settings
+    rankdir=TB;
+    node [shape=box, fontname="Arial", fontsize=12, style=filled];
+    edge [fontname="Arial", fontsize=10];
+    splines=polyline;
+    nodesep=0.4;
+    ranksep=1.2;
+
+    // Root node (Level 0)
+    root [label="ROOT NODE\n500 keys, 501 pointers\nKeys: 125K | 250K | 375K | ... | 9.875M",
+          fillcolor="#4A90E2", fontcolor=white, height=1.2, width=3.0];
+
+    // Internal nodes (Level 1)
+    {rank=same;
+        i1 [label="INTERNAL-1\n500 keys, 501 ptrs\n250 | 500 | 750 | ...",
+            fillcolor="#F5A623", fontcolor=white, width=2.0, height=1.0];
+        i2 [label="INTERNAL-2\n500 keys, 501 ptrs\n125.25K | 125.5K | ...",
+            fillcolor="#F5A623", fontcolor=white, width=2.0, height=1.0];
+        i3 [label="INTERNAL-3\n500 keys, 501 ptrs\n250.25K | 250.5K | ...",
+            fillcolor="#F5A623", fontcolor=white, width=2.0, height=1.0];
+        idots1 [label="...\n~245 nodes", fillcolor="#E0E0E0", width=1.4, height=1.0];
+        i250 [label="INTERNAL-250\n500 keys, 501 ptrs\n4.999M | 5.0M | ...",
+            fillcolor="#F5A623", fontcolor=white, width=2.0, height=1.0];
+        idots2 [label="...\n~245 nodes", fillcolor="#E0E0E0", width=1.4, height=1.0];
+        i500 [label="INTERNAL-500\n500 keys, 501 ptrs\n9.874M | 9.875M | ...",
+            fillcolor="#F5A623", fontcolor=white, width=2.0, height=1.0];
+        i501 [label="INTERNAL-501\n500 keys, 501 ptrs\n9.999M | 10.0M",
+            fillcolor="#F5A623", fontcolor=white, width=2.0, height=1.0];
+    }
+
+    // Leaf nodes (Level 2)
+    {rank=same;
+        l1 [label="LEAF-1\n250 records\n1: Adventure, AK\n2: Comedy, AZ\n3: Drama, AR\n4: Thriller, CA\n5: Horror, CO\n...\n250: Genre, State",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+        l2 [label="LEAF-2\n250 records\n251-500\n6: Romance, CT\n7: Crime, DE\n8: Mystery, FL\n...",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+        l3 [label="LEAF-3\n250 records\n501-750\n9: SciFi, GA\n10: Fantasy, HI\n...",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+        l4 [label="LEAF-4\n250 records\n751-1000\n...",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+        ldots1 [label="...\n~497 more leaves\nunder INT-1", fillcolor="#E0E0E0", width=2.0, height=2.0];
+
+        l1000 [label="LEAF-1000\n250 records\n249,751-250,000",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+        ldots2 [label="...\n~19,000 leaves", fillcolor="#E0E0E0", width=1.8, height=2.0];
+        l20000 [label="LEAF-20,000\n250 records\n4,999,751-5,000,000",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+        ldots3 [label="...\n~19,000 leaves", fillcolor="#E0E0E0", width=1.8, height=2.0];
+        l39999 [label="LEAF-39,999\n250 records\n9,999,501-9,999,750",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+        l40000 [label="LEAF-40,000\n250 records\n9,999,751-10,000,000",
+            fillcolor="#7ED321", height=2.0, width=2.4];
+    }
+
+    // Root to Internal connections
+    root -> i1 [label="ptr 1"];
+    root -> i2 [label="ptr 2"];
+    root -> i3 [label="ptr 3"];
+    root -> idots1 [style=dashed, label="..."];
+    root -> i250 [label="ptr 250"];
+    root -> idots2 [style=dashed, label="..."];
+    root -> i500 [label="ptr 500"];
+    root -> i501 [label="ptr 501"];
+
+    // Internal to Leaf connections (showing INT-1's children)
+    i1 -> l1 [label="ptr 1"];
+    i1 -> l2 [label="ptr 2"];
+    i1 -> l3 [label="ptr 3"];
+    i1 -> l4 [label="ptr 4"];
+    i1 -> ldots1 [style=dashed, label="...497 ptrs"];
+
+    // Other internal nodes to their leaves
+    i2 -> l1000 [label="some ptr"];
+    i250 -> l20000 [label="some ptr"];
+    i500 -> l39999 [label="some ptr"];
+    i501 -> l40000 [label="last ptr"];
+
+    // Leaf linked list (horizontal pointers for range scans)
+    edge [style=dashed, color="#666666", constraint=false, arrowhead=vee];
+    l1 -> l2 [label="next"];
+    l2 -> l3 [label="next"];
+    l3 -> l4 [label="next"];
+    l4 -> ldots1 [label="next"];
+    ldots1 -> l1000 [label="next"];
+    l1000 -> ldots2 [label="next"];
+    ldots2 -> l20000 [label="next"];
+    l20000 -> ldots3 [label="next"];
+    ldots3 -> l39999 [label="next"];
+    l39999 -> l40000 [label="next"];
+
+    // Legend with page size info
+    label="\nB+ Tree for 10 Million Records\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nPAGE SIZE: 8 KB (all nodes)\nPrimary Key: 8 bytes (INT64) | Row Data: 24 bytes total\n\nTree Statistics:\n  • Height: 3 levels (root at level 0)\n  • Level 0: 1 root node\n  • Level 1: 501 internal nodes\n  • Level 2: ~40,000 leaf nodes";
+    fontsize=12;
+    labelloc=b;
+}
